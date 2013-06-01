@@ -1,3 +1,11 @@
+#map {
+  padding:20px;
+  background-color: #ff0000;
+}
+
+.ki {
+  color: #FFFF00;
+}
 
 .land {
   fill: #363531;
@@ -20,7 +28,7 @@
   fill: #ff8499;
 }
 .yon {
-  fill: #000066;
+  fill: #93bbff;
 }
 .roku {
   fill: #8fbdba;
