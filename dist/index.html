@@ -1,0 +1,166 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <link rel="stylesheet" href="styles/94a7dcf8.main.css">
+  </head>
+  <body ng-app="govhackApp">
+    <!--[if lt IE 7]>
+      <p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+    <![endif]-->
+
+    <!--[if lt IE 9]>
+      <script src="components/es5-shim/es5-shim.js"></script>
+      <script src="components/json3/lib/json3.min.js"></script>
+    <![endif]-->
+
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+
+    <!-- Add your site or application content here -->
+    <div class="container" ng-controller="MainCtrl">
+      <div class="hero-unit">
+        <h1>GovHack 2013 TeamSV</h1>
+        <h3>Enjoy!</h3>
+      </div>
+
+      <div id="map" class="hero-unit" style="padding:0px">
+      </div>
+
+      <script>
+
+        var width = 960,
+                height = 800;
+
+        var path = d3.geo.path()
+                .projection(null);
+
+        var svg = d3.select("#map").append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+        d3.json("data/au2.json", function(error, ca) {
+          svg.append("path")
+                  .datum(topojson.feature(ca, ca.objects.counties))
+                  .attr("class", "land")
+                  .attr("d", path);
+
+//          svg.append("path")
+//                  .datum(topojson.mesh(ca, ca.objects.LGA11aAustProjected, function(a, b) { return a !== b; }))
+//                  .attr("class", "boundary")
+//                  .attr("d", path);
+
+          svg.append("path")
+                  .datum(topojson.feature(ca, ca.objects.centroid))
+                  .attr("class", "point")
+                  .attr("d", path);
+
+        });
+
+        d3.select(self.frameElement).style("height", height + "px");
+
+      </script>
+      <script>
+
+//        var color = d3.scale.quantize()
+//                .range(["#156b87", "#876315", "#543510", "#872815"]);
+//
+//        var size = 960;
+//
+//        var pack = d3.layout.pack()
+//                .sort(null)
+//                .size([size, size])
+//                .value(function(d) { return d.radius * d.radius; })
+//                .padding(1.5);
+//
+//        //        var svg = d3.select("#bubble").append("svg")
+//        //                .attr("width", size)
+//        //                .attr("height", size);
+//
+//        d3.csv("data/exoplanets-1.csv", function(error, exoplanets) {
+//          exoplanets.forEach(function(d) { d.radius = +d.radius; });
+//
+//          color.domain(d3.extent(exoplanets, function(d) { return d.radius; }));
+//
+//          svg.selectAll("circle")
+//                  .data(pack.nodes({children: exoplanets}).slice(1))
+//                  .enter().append("circle")
+//                  .attr("r", function(d) { return d.r; })
+//                  .attr("cx", function(d) { return d.x; })
+//                  .attr("cy", function(d) { return d.y; })
+//                  .style("fill", function(d) { return color(d.radius); })
+//                  .append("title")
+//                  .text(function(d) { return d.name; });
+//
+//        });
+//
+//        d3.select(self.frameElement).style("height", size + "px");
+
+
+        //network
+        var w = 960,
+                h = 500
+        d3.json("data/readme.json", function(json) {
+          var force = d3.layout.force()
+                  .nodes(json.nodes)
+                  .links(json.links)
+                  .gravity(.05)
+                  .distance(100)
+                  .charge(-100)
+                  .size([w, h])
+                  .start();
+
+          var link = svg.selectAll("line.link")
+                  .data(json.links)
+                  .enter().append("svg:line")
+                  .attr("class", "link");
+
+          var node = svg.selectAll("g.node")
+                  .data(json.nodes)
+                  .enter().append("svg:g")
+                  .attr("class", "node")
+                  .call(force.drag);
+
+          node.append("svg:image")
+                  .attr("class", "circle")
+                  .attr("xlink:href", "favicon.ico")
+                  .attr("x", "-8px")
+                  .attr("y", "-8px")
+                  .attr("width", "16px")
+                  .attr("height", "16px");
+
+          node.append("svg:title")
+                  .text(function(d) { return d.name; });
+
+          force.on("tick", function() {
+            link.attr("x1", function(d) { return d.source.x; })
+                    .attr("y1", function(d) { return d.source.y; })
+                    .attr("x2", function(d) { return d.target.x; })
+                    .attr("y2", function(d) { return d.target.y; });
+
+            node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+          });
+        });
+
+
+      </script>
+
+    </div>
+
+
+
+
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.6/angular.min.js"></script>
+
+    <script src="scripts/bb6c875c.scripts.js"></script>
+
+  </body>
+</html>

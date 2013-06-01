@@ -1,0 +1,1 @@
+"use strict";angular.module("govhackApp",[]).config(["$routeProvider",function(a){a.when("/",{templateUrl:"views/main.html",controller:"MainCtrl"}).otherwise({redirectTo:"/"})}]),angular.module("govhackApp").controller("MainCtrl",["$scope","$log",function(a,b){b.info("MainCtrl")}]);
