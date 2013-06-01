@@ -1,0 +1,58 @@
+
+
+select a.CM_IGA_Name, b.IA_NAME11, b.IA_CODE11 from temp1 a left join temp2 b on b.IA_NAME11 like a.CM_IGA_Name+'%'
+where b.IL_CODE11 is not null
+
+
+
+
+select CM_IGA_Name, name from temp1
+order by CM_IGA_Name
+
+select IA_NAME11 from temp2
+order by IA_NAME11
+
+
+select * from temp2
+order by IA_NAME11
+
+select CM_IGA_Name from temp1
+where CM_IGA_Name NOT LIKE '%(%'
+order by CM_IGA_Name
+
+update temp1 set name = CM_IGA_Name
+where CM_IGA_Name NOT LIKE '%(%'
+
+update temp1 set name = rtrim(name)
+
+
+select CM_IGA_Name, CHARINDEX('(', CM_IGA_Name) from temp1
+where CM_IGA_Name LIKE '%(%'
+order by CM_IGA_Name
+
+select CM_IGA_Name, CHARINDEX('(', CM_IGA_Name), SUBSTRING(CM_IGA_Name, 0, CHARINDEX('(', CM_IGA_Name))  from temp1
+where CM_IGA_Name LIKE '%(%'
+order by CM_IGA_Name
+
+
+update temp1 set name = SUBSTRING(CM_IGA_Name, 0, CHARINDEX('(', CM_IGA_Name))
+where CM_IGA_Name LIKE '%(%'
+
+select a.name from temp1 a
+
+select a.name from temp1 a
+
+
+select a.name, b.IA_NAME11, b.IA_CODE11 from temp1 a left join temp2 b on b.IA_NAME11 like a.name+'%'
+where b.IL_CODE11 is not null
+
+
+select distinct b.*, a.Indigenousno,a.Nonindigenousno from temp1 a left join temp2 b on b.IA_NAME11 like a.name+'%'
+where b.IL_CODE11 is not null
+order by b.IA_NAME11
+
+
+select distinct b.IA_NAME11, b.IR_NAME11, a.Indigenousno,a.Nonindigenousno from temp1 a left join temp2 b on b.IA_NAME11 like a.name+'%'
+where b.IL_CODE11 is not null
+order by b.IA_NAME11
+
