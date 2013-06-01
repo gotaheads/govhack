@@ -50,25 +50,79 @@
                 .attr("width", width)
                 .attr("height", height);
 
-        d3.json("data/au2.json", function(error, ca) {
+        d3.json("data/au8.json", function(error, ca) {
           svg.append("path")
                   .datum(topojson.feature(ca, ca.objects.counties))
                   .attr("class", "land")
                   .attr("d", path);
 
+        });
+
+
+        var radius = d3.scale.sqrt()
+                .domain([0, 1e6])
+                .range([0, 400]);
+
+        d3.json("data/ind2.json", function(error, ca) {
+
 //          svg.append("path")
-//                  .datum(topojson.mesh(ca, ca.objects.LGA11aAustProjected, function(a, b) { return a !== b; }))
-//                  .attr("class", "boundary")
+//                  .datum(topojson.feature(ca, ca.objects.centroid))
+//                  .attr("class", "point")
 //                  .attr("d", path);
 
-          svg.append("path")
-                  .datum(topojson.feature(ca, ca.objects.centroid))
-                  .attr("class", "point")
-                  .attr("d", path);
+          svg.selectAll(".point")
+                  .data(topojson.feature(ca, ca.objects.centroid).features.sort(function(a, b) { return b.properties.num - a.properties.num; }))
+                  .enter().append("path")
+                  .attr("class", function(d) {
+                    var num = parseInt(d.properties.num);
+                    console.log(d.id + ' ' + num  + ' ' + d.properties.num);
+                    if(num == 0) {
+                      return 'zero';
+                    }
+                    if(num < 200) {
+                      return 'ni';
+                    }
+                    if(num < 400) {
+                      return 'yon';
+                    }
+                    if(num < 600) {
+                      return 'roku';
+                    }
+                    if(num < 800) {
+                      return 'hachi';
+                    }
+                    if(num < 800) {
+                      return 'ju';
+                    }
+                    return "point";
+                  })
+                  .attr("d", path.pointRadius(function(d) { return radius(d.properties.num); }));
+
+//          svg.selectAll(".point")
+//                  .data(topojson.feature(ca, ca.objects.centroid).features)
+//                  .enter().append(".point")
+//                  .attr("class", function(d) {
+//                    console.log(d.id + '[' + d.properties.num + ']' + d.properties.name);
+//
+//                    var num = parseInt(d.properties.num);
+//                    if(num == 0) {
+//                      return 'zero';
+//                    }
+//                    if(num < 1000) {
+//                      return 'sen';
+//                    }
+//
+//                    return 'ppp';
+//                  })
+//                  .attr("d", path.pointRadius(function(d) {
+//                    console.log('aaaaaaaaaaaaaaaa ' + d.properties.num);
+//                    return radius(d.properties.num); }));
+
 
         });
 
-        d3.select(self.frameElement).style("height", height + "px");
+
+        //d3.select(self.frameElement).style("height", height + "px");
 
       </script>
       <script>
@@ -109,49 +163,49 @@
 
 
         //network
-        var w = 960,
-                h = 500
-        d3.json("data/readme.json", function(json) {
-          var force = d3.layout.force()
-                  .nodes(json.nodes)
-                  .links(json.links)
-                  .gravity(.05)
-                  .distance(100)
-                  .charge(-100)
-                  .size([w, h])
-                  .start();
-
-          var link = svg.selectAll("line.link")
-                  .data(json.links)
-                  .enter().append("svg:line")
-                  .attr("class", "link");
-
-          var node = svg.selectAll("g.node")
-                  .data(json.nodes)
-                  .enter().append("svg:g")
-                  .attr("class", "node")
-                  .call(force.drag);
-
-          node.append("svg:image")
-                  .attr("class", "circle")
-                  .attr("xlink:href", "favicon.ico")
-                  .attr("x", "-8px")
-                  .attr("y", "-8px")
-                  .attr("width", "16px")
-                  .attr("height", "16px");
-
-          node.append("svg:title")
-                  .text(function(d) { return d.name; });
-
-          force.on("tick", function() {
-            link.attr("x1", function(d) { return d.source.x; })
-                    .attr("y1", function(d) { return d.source.y; })
-                    .attr("x2", function(d) { return d.target.x; })
-                    .attr("y2", function(d) { return d.target.y; });
-
-            node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-          });
-        });
+//        var w = 960,
+//                h = 500
+//        d3.json("data/readme.json", function(json) {
+//          var force = d3.layout.force()
+//                  .nodes(json.nodes)
+//                  .links(json.links)
+//                  .gravity(.05)
+//                  .distance(100)
+//                  .charge(-100)
+//                  .size([w, h])
+//                  .start();
+//
+//          var link = svg.selectAll("line.link")
+//                  .data(json.links)
+//                  .enter().append("svg:line")
+//                  .attr("class", "link");
+//
+//          var node = svg.selectAll("g.node")
+//                  .data(json.nodes)
+//                  .enter().append("svg:g")
+//                  .attr("class", "node")
+//                  .call(force.drag);
+//
+//          node.append("svg:image")
+//                  .attr("class", "circle")
+//                  .attr("xlink:href", "favicon.ico")
+//                  .attr("x", "-8px")
+//                  .attr("y", "-8px")
+//                  .attr("width", "16px")
+//                  .attr("height", "16px");
+//
+//          node.append("svg:title")
+//                  .text(function(d) { return d.name; });
+//
+//          force.on("tick", function() {
+//            link.attr("x1", function(d) { return d.source.x; })
+//                    .attr("y1", function(d) { return d.source.y; })
+//                    .attr("x2", function(d) { return d.target.x; })
+//                    .attr("y2", function(d) { return d.target.y; });
+//
+//            node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+//          });
+//        });
 
 
       </script>

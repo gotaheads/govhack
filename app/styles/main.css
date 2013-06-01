@@ -1,6 +1,6 @@
 
 .land {
-  fill: #ddd000;
+  fill: #363531;
 }
 
 .point {
@@ -9,4 +9,25 @@
 
 .link {
   stroke: #ccc;
+}
+
+.zero {
+  fill: #ete19a;
+  stroke: #909; stroke-width: 10;
+}
+
+.ni {
+  fill: #ff8499;
+}
+.yon {
+  fill: #000066;
+}
+.roku {
+  fill: #8fbdba;
+}
+.hachi {
+  fill: #cd863d;
+}
+.ju {
+  fill: #9c566e;
 }
