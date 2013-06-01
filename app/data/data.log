@@ -1,0 +1,7 @@
+topojson \
+    --width 960 \
+    --height 800 \
+    --margin 20 \
+    -s .25 \
+    -o au.json \
+    -- counties=Australia_simple.shp
