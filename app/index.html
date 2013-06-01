@@ -35,7 +35,7 @@
         <h3>Enjoy!</h3>
       </div>
 
-      <div id="map" class="hero-unit">
+      <div id="map" class="hero-unit" style="padding:0px;">
       </div>
 
       <script>
@@ -50,61 +50,111 @@
                 .attr("width", width)
                 .attr("height", height);
 
-        d3.json("data/au.json", function(error, ca) {
+        d3.json("data/au2.json", function(error, ca) {
           svg.append("path")
                   .datum(topojson.feature(ca, ca.objects.counties))
                   .attr("class", "land")
                   .attr("d", path);
 
+//          svg.append("path")
+//                  .datum(topojson.mesh(ca, ca.objects.LGA11aAustProjected, function(a, b) { return a !== b; }))
+//                  .attr("class", "boundary")
+//                  .attr("d", path);
+
           svg.append("path")
-                  .datum(topojson.mesh(ca, ca.objects.LGA11aAustProjected, function(a, b) { return a !== b; }))
-                  .attr("class", "boundary")
+                  .datum(topojson.feature(ca, ca.objects.centroid))
+                  .attr("class", "point")
                   .attr("d", path);
+
         });
 
         d3.select(self.frameElement).style("height", height + "px");
 
       </script>
-
-      <!-- div id="bubble" class="hero-unit">
-      </div>
-
       <script>
 
-        var color = d3.scale.quantize()
-                .range(["#156b87", "#876315", "#543510", "#872815"]);
+//        var color = d3.scale.quantize()
+//                .range(["#156b87", "#876315", "#543510", "#872815"]);
+//
+//        var size = 960;
+//
+//        var pack = d3.layout.pack()
+//                .sort(null)
+//                .size([size, size])
+//                .value(function(d) { return d.radius * d.radius; })
+//                .padding(1.5);
+//
+//        //        var svg = d3.select("#bubble").append("svg")
+//        //                .attr("width", size)
+//        //                .attr("height", size);
+//
+//        d3.csv("data/exoplanets-1.csv", function(error, exoplanets) {
+//          exoplanets.forEach(function(d) { d.radius = +d.radius; });
+//
+//          color.domain(d3.extent(exoplanets, function(d) { return d.radius; }));
+//
+//          svg.selectAll("circle")
+//                  .data(pack.nodes({children: exoplanets}).slice(1))
+//                  .enter().append("circle")
+//                  .attr("r", function(d) { return d.r; })
+//                  .attr("cx", function(d) { return d.x; })
+//                  .attr("cy", function(d) { return d.y; })
+//                  .style("fill", function(d) { return color(d.radius); })
+//                  .append("title")
+//                  .text(function(d) { return d.name; });
+//
+//        });
+//
+//        d3.select(self.frameElement).style("height", size + "px");
 
-        var size = 960;
 
-        var pack = d3.layout.pack()
-                .sort(null)
-                .size([size, size])
-                .value(function(d) { return d.radius * d.radius; })
-                .padding(1.5);
+        //network
+        var w = 960,
+                h = 500
+        d3.json("data/readme.json", function(json) {
+          var force = d3.layout.force()
+                  .nodes(json.nodes)
+                  .links(json.links)
+                  .gravity(.05)
+                  .distance(100)
+                  .charge(-100)
+                  .size([w, h])
+                  .start();
 
-        var svg = d3.select("#bubble").append("svg")
-                .attr("width", size)
-                .attr("height", size);
+          var link = svg.selectAll("line.link")
+                  .data(json.links)
+                  .enter().append("svg:line")
+                  .attr("class", "link");
 
-        d3.csv("exoplanets.csv", function(error, exoplanets) {
-          exoplanets.forEach(function(d) { d.radius = +d.radius; });
+          var node = svg.selectAll("g.node")
+                  .data(json.nodes)
+                  .enter().append("svg:g")
+                  .attr("class", "node")
+                  .call(force.drag);
 
-          color.domain(d3.extent(exoplanets, function(d) { return d.radius; }));
+          node.append("svg:image")
+                  .attr("class", "circle")
+                  .attr("xlink:href", "favicon.ico")
+                  .attr("x", "-8px")
+                  .attr("y", "-8px")
+                  .attr("width", "16px")
+                  .attr("height", "16px");
 
-          svg.selectAll("circle")
-                  .data(pack.nodes({children: exoplanets}).slice(1))
-                  .enter().append("circle")
-                  .attr("r", function(d) { return d.r; })
-                  .attr("cx", function(d) { return d.x; })
-                  .attr("cy", function(d) { return d.y; })
-                  .style("fill", function(d) { return color(d.radius); })
-                  .append("title")
+          node.append("svg:title")
                   .text(function(d) { return d.name; });
+
+          force.on("tick", function() {
+            link.attr("x1", function(d) { return d.source.x; })
+                    .attr("y1", function(d) { return d.source.y; })
+                    .attr("x2", function(d) { return d.target.x; })
+                    .attr("y2", function(d) { return d.target.y; });
+
+            node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+          });
         });
 
-        d3.select(self.frameElement).style("height", size + "px");
 
-      </script -->
+      </script>
 
     </div>
 

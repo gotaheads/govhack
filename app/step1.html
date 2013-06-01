@@ -1,0 +1,118 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/bootstrap.css">
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild -->
+</head>
+<body ng-app="govhackApp">
+<!--[if lt IE 7]>
+<p class="chromeframe">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to better experience this site.</p>
+<![endif]-->
+
+<!--[if lt IE 9]>
+<script src="components/es5-shim/es5-shim.js"></script>
+<script src="components/json3/lib/json3.min.js"></script>
+<![endif]-->
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+
+<!-- Add your site or application content here -->
+<div class="container" ng-controller="MainCtrl">
+  <div class="hero-unit">
+    <h1>GovHack 2013 TeamSV</h1>
+    <h3>Enjoy!</h3>
+  </div>
+
+  <div id="map" class="hero-unit" style="padding:0px;">
+  </div>
+
+  <script>
+
+    var width = 960,
+            height = 800;
+
+    var path = d3.geo.path()
+            .projection(null);
+
+    var svg = d3.select("#map").append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+    d3.json("data/au.json", function(error, ca) {
+      svg.append("path")
+              .datum(topojson.feature(ca, ca.objects.counties))
+              .attr("class", "land")
+              .attr("d", path);
+
+      svg.append("path")
+              .datum(topojson.mesh(ca, ca.objects.LGA11aAustProjected, function(a, b) { return a !== b; }))
+              .attr("class", "boundary")
+              .attr("d", path);
+    });
+
+    d3.select(self.frameElement).style("height", height + "px");
+
+  </script>
+  <script>
+
+    var color = d3.scale.quantize()
+            .range(["#156b87", "#876315", "#543510", "#872815"]);
+
+    var size = 960;
+
+    var pack = d3.layout.pack()
+            .sort(null)
+            .size([size, size])
+            .value(function(d) { return d.radius * d.radius; })
+            .padding(1.5);
+
+    //        var svg = d3.select("#bubble").append("svg")
+    //                .attr("width", size)
+    //                .attr("height", size);
+
+    d3.csv("data/exoplanets.csv", function(error, exoplanets) {
+      exoplanets.forEach(function(d) { d.radius = +d.radius; });
+
+      color.domain(d3.extent(exoplanets, function(d) { return d.radius; }));
+
+      svg.selectAll("circle")
+              .data(pack.nodes({children: exoplanets}).slice(1))
+              .enter().append("circle")
+              .attr("r", function(d) { return d.r; })
+              .attr("cx", function(d) { return d.x; })
+              .attr("cy", function(d) { return d.y; })
+              .style("fill", function(d) { return color(d.radius); })
+              .append("title")
+              .text(function(d) { return d.name; });
+    });
+
+    d3.select(self.frameElement).style("height", size + "px");
+
+  </script>
+
+</div>
+
+
+
+
+<script src="components/angular/angular.js"></script>
+
+<!-- build:js scripts/scripts.js -->
+<script src="scripts/app.js"></script>
+<script src="scripts/controllers/main.js"></script>
+<!-- endbuild -->
+
+</body>
+</html>
