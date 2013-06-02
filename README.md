@@ -1,11 +1,7 @@
 <a href="http://govhack2013teamsv.appspot.com/">
-##  GovHack 2013 TeamSV
+##  GovHack 2013 TeamSV Indigenous Australia 
 </a>
 =======
-
-<a href="http://govhack2013teamsv.appspot.com/">
-## Indigenous Australia 
-</a>
 
 ## Story
 This project is created for <a href="http://www.govhack.org/">GovHack 2013</a>.
@@ -20,6 +16,7 @@ We've used the population of indigenous Australians data from <a href="http://ww
 * <a href="http://yeoman.io/">Yeoman</a> + <a href="http://gruntjs.com/">Grunt</a>
 
 ## How to run
+You can either download dist.zip and install on a web server or clone and run the following:
 ```
 $ npm install
 $ grunt
