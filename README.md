@@ -10,11 +10,12 @@ You can view the demo <a href="http://govhack2013teamsv.appspot.com/">here</a>.
 We've used the population of indigenous Australians data from <a href="http://www.abs.gov.au/">Australian Bureau of Statistics</a> to draw the circles and change the colours and size by the numbers.
 
 
-## How to run
-You can either download dist.zip and install on a web server or clone and run the following:
+## How to build/run the project
+You can either download dist.zip and install on a web server or clone and run the following, install <a href="http://nodejs.org/">nodejs</a> first:
+
 ```
 $ npm install
-$ grunt
+$ grunt server
 ```
 
 ## Tools used
