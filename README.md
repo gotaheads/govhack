@@ -10,17 +10,17 @@ You can view the demo <a href="<a href="http://govhack2013teamsv.appspot.com/">"
 We've used the population of indigenous Australians data from <a href="http://www.abs.gov.au/">Australian Bureau of Statistics</a> to draw the circles and change the colours and size by the numbers.
 
 
-## Tools used
-* <a href="http://d3js.org/">D3</a> + <a href="https://github.com/mbostock/topojson">TopoJson</a>
-* <a href="http://angularjs.org/">AngularJS</a> + <a href="http://twitter.github.io/bootstrap/">Bootstrap</a>
-* <a href="http://yeoman.io/">Yeoman</a> + <a href="http://gruntjs.com/">Grunt</a>
-
 ## How to run
 You can either download dist.zip and install on a web server or clone and run the following:
 ```
 $ npm install
 $ grunt
 ```
+
+## Tools used
+* <a href="http://d3js.org/">D3</a> + <a href="https://github.com/mbostock/topojson">TopoJson</a>
+* <a href="http://angularjs.org/">AngularJS</a> + <a href="http://twitter.github.io/bootstrap/">Bootstrap</a>
+* <a href="http://yeoman.io/">Yeoman</a> + <a href="http://gruntjs.com/">Grunt</a>
 
 ## Created by 
 
